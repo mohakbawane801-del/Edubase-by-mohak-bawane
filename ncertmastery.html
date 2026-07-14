@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduBase - NCERT Mastery</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f0f4f8; }
+        .navbar {
+            background: #0a1e3c;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .navbar .logo { color: white; font-size: 1.8rem; font-weight: bold; }
+        .navbar .logo span { color: #ff6b6b; }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 30px;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+        .nav-links a:hover { background: #ff6b6b; }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .page-title {
+            font-size: 2.5rem;
+            color: #0a1e3c;
+            margin-bottom: 10px;
+        }
+        .page-subtitle {
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .card h2 { color: #0a1e3c; margin-bottom: 20px; }
+        
+        /* Subject Tabs */
+        .subject-tabs {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+        .subject-tabs button {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+        .subject-tabs button:hover { transform: scale(1.05); }
+        .tab-all { background: #0a1e3c; color: white; }
+        .tab-all:hover { background: #1a3a6c; }
+        .tab-phy { background: #3498db; color: white; }
+        .tab-phy:hover { background: #2980b9; }
+        .tab-chem { background: #2ecc71; color: white; }
+        .tab-chem:hover { background: #27ae60; }
+        .tab-bio { background: #e74c3c; color: white; }
+        .tab-bio:hover { background: #c0392b; }
+        .tab-active { transform: scale(1.08); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        
+        /* Chapter List */
+        .chapter-item {
+            padding: 14px 18px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            transition: 0.3s;
+            border-radius: 10px;
+        }
+        .chapter-item:hover {
+            background: #f8f9fa;
+        }
+        .chapter-item .chapter-name {
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        .chapter-item .chapter-name .icon {
+            margin-right: 8px;
+        }
+        .chapter-item .badge {
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: white;
+        }
+        .badge-phy { background: #3498db; }
+        .badge-chem { background: #2ecc71; }
+        .badge-bio { background: #e74c3c; }
+        .chapter-item .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .chapter-item .actions button {
+            padding: 6px 18px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+        .btn-notes { background: #0a1e3c; color: white; }
+        .btn-notes:hover { background: #ff6b6b; }
+        .btn-pdf { background: #e67e22; color: white; }
+        .btn-pdf:hover { background: #d35400; }
+        .btn-video { background: #e74c3c; color: white; }
+        .btn-video:hover { background: #c0392b; }
+        
+        .back-btn {
+            display: inline-block;
+            background: #0a1e3c;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+        .back-btn:hover { background: #ff6b6b; }
+        .footer {
+            background: #0a1e3c;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 50px;
+        }
+        .footer .love { color: #ff6b6b; }
+        .footer .name { color: #ffd700; font-weight: bold; }
+        
+        .coming-soon {
+            text-align: center;
+            padding: 25px;
+            color: #999;
+            font-style: italic;
+        }
+        
+        @media (max-width: 600px) {
+            .chapter-item { flex-direction: column; align-items: flex-start; }
+            .chapter-item .actions { width: 100%; justify-content: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">Edu<span>Base</span></div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="chemistry.html">🧪 Chemistry</a>
+            <a href="physics.html">⚛️ Physics</a>
+            <a href="biology.html">🧬 Biology</a>
+            <a href="ncert-mastery.html">📂 Mastery</a>
+            <a href="pyq.html">📝 PYQs</a>
+            <a href="planner.html">📅 Planner</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">📂 NCERT Mastery</h1>
+        <p class="page-subtitle">Physics • Chemistry • Biology — Chapter-wise Short Notes (NCERT Based)</p>
+
+        <!-- Subject Filter -->
+        <div class="card">
+            <h2>📚 Filter by Subject</h2>
+            <div class="subject-tabs">
+                <button class="tab-all tab-active" onclick="filterChapters('all', this)">📚 All</button>
+                <button class="tab-phy" onclick="filterChapters('physics', this)">⚛️ Physics</button>
+                <button class="tab-chem" onclick="filterChapters('chemistry', this)">🧪 Chemistry</button>
+                <button class="tab-bio" onclick="filterChapters('biology', this)">🧬 Biology</button>
+            </div>
+        </div>
+
+        <!-- Chapter List -->
+        <div class="card" id="chapterList">
+            <h2>📖 All Chapters</h2>
+
+            <!-- ===== PHYSICS CHAPTERS ===== -->
+            <div class="chapter-item" data-subject="physics">
+                <span class="chapter-name"><span class="icon">⚛️</span> Chapter 1: Physical World</span>
+                <span class="badge badge-phy">Physics</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <div class="chapter-item" data-subject="physics">
+                <span class="chapter-name"><span class="icon">⚛️</span> Chapter 2: Units & Measurement</span>
+                <span class="badge badge-phy">Physics</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <div class="chapter-item" data-subject="physics">
+                <span class="chapter-name"><span class="icon">⚛️</span> Chapter 3: Motion in Straight Line</span>
+                <span class="badge badge-phy">Physics</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <div class="chapter-item" data-subject="physics">
+                <span class="chapter-name"><span class="icon">⚛️</span> Chapter 4: Motion in Plane</span>
+                <span class="badge badge-phy">Physics</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <div class="chapter-item" data-subject="physics">
+                <span class="chapter-name"><span class="icon">⚛️</span> Chapter 5: Laws of Motion</span>
+                <span class="badge badge-phy">Physics</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <div class="chapter-item" data-subject="physics">
+                <span class="chapter-name"><span class="icon">⚛️</span> Chapter 6: Work, Energy & Power</span>
+                <span class="badge badge-phy">Physics</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <!-- ===== CHEMISTRY CHAPTERS ===== -->
+            <div class="chapter-item" data-subject="chemistry">
+                <span class="chapter-name"><span class="icon">🧪</span> Chapter 1: Some Basic Concepts</span>
+                <span class="badge badge-chem">Chemistry</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <div class="chapter-item" data-subject="chemistry">
+                <span class="chapter-name"><span class="icon">🧪</span> Chapter 2: Structure of Atom</span>
+                <span class="badge badge-chem">Chemistry</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <div class="chapter-item" data-subject="chemistry">
+                <span class="chapter-name"><span class="icon">🧪</span> Chapter 3: Classification of Elements</span>
+                <span class="badge badge-chem">Chemistry</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <div class="chapter-item" data-subject="chemistry">
+                <span class="chapter-name"><span class="icon">🧪</span> Chapter 4: Chemical Bonding</span>
+                <span class="badge badge-chem">Chemistry</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <div class="chapter-item" data-subject="chemistry">
+                <span class="chapter-name"><span class="icon">🧪</span> Chapter 5: States of Matter</span>
+                <span class="badge badge-chem">Chemistry</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <!-- ===== BIOLOGY CHAPTERS ===== -->
+            <div class="chapter-item" data-subject="biology">
+                <span class="chapter-name"><span class="icon">🧬</span> Chapter 1: The Living World</span>
+                <span class="badge badge-bio">Biology</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <div class="chapter-item" data-subject="biology">
+                <span class="chapter-name"><span class="icon">🧬</span> Chapter 2: Biological Classification</span>
+                <span class="badge badge-bio">Biology</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <div class="chapter-item" data-subject="biology">
+                <span class="chapter-name"><span class="icon">🧬</span> Chapter 3: Plant Kingdom</span>
+                <span class="badge badge-bio">Biology</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <div class="chapter-item" data-subject="biology">
+                <span class="chapter-name"><span class="icon">🧬</span> Chapter 4: Animal Kingdom</span>
+                <span class="badge badge-bio">Biology</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <div class="chapter-item" data-subject="biology">
+                <span class="chapter-name"><span class="icon">🧬</span> Chapter 5: Morphology of Flowering Plants</span>
+                <span class="badge badge-bio">Biology</span>
+                <div class="actions">
+                    <button class="btn-notes" onclick="alert('📖 Notes opening... (PDF link will be added)')">📄 Notes</button>
+                    <button class="btn-pdf" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ PDF</button>
+                </div>
+            </div>
+
+            <div class="coming-soon">
+                📝 More chapters and PDF downloads coming soon... 🚀
+            </div>
+        </div>
+
+        <a href="index.html" class="back-btn">⬅ Back to Home</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Made with <span class="love">❤️</span> by <span class="name">Mohak Bawane</span></p>
+        <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 5px;">EduBase - Sab kuch Free hai for Future Doctors</p>
+    </div>
+
+    <script>
+        function filterChapters(subject, button) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.subject-tabs button').forEach(btn => {
+                btn.classList.remove('tab-active');
+            });
+            button.classList.add('tab-active');
+
+            // Filter chapters
+            const chapters = document.querySelectorAll('.chapter-item');
+            let visibleCount = 0;
+            
+            chapters.forEach(chapter => {
+                if (subject === 'all' || chapter.dataset.subject === subject) {
+                    chapter.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    chapter.style.display = 'none';
+                }
+            });
+
+            // Show/hide coming soon message
+            const comingSoon = document.querySelector('.coming-soon');
+            if (visibleCount === 0) {
+                comingSoon.style.display = 'block';
+            } else {
+                comingSoon.style.display = 'block';
+            }
+        }
+
+        // Initialize - Show all chapters
+        document.addEventListener('DOMContentLoaded', function() {
+            // Small delay to ensure everything loads
+            setTimeout(() => {
+                filterChapters('all', document.querySelector('.tab-all'));
+            }, 100);
+        });
+    </script>
+
+</body>
+</html>

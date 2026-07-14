@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduBase - PYQs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f0f4f8; }
+        .navbar {
+            background: #0a1e3c;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .navbar .logo { color: white; font-size: 1.8rem; font-weight: bold; }
+        .navbar .logo span { color: #ff6b6b; }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 30px;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+        .nav-links a:hover { background: #ff6b6b; }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .page-title {
+            font-size: 2.5rem;
+            color: #0a1e3c;
+            margin-bottom: 10px;
+        }
+        .page-subtitle {
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .card h2 { color: #0a1e3c; margin-bottom: 20px; }
+        .pyq-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            transition: 0.3s;
+        }
+        .pyq-item:hover {
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .pyq-item .year {
+            background: #9b59b6;
+            color: white;
+            padding: 5px 18px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .pyq-item .subject-tag {
+            background: #0a1e3c;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+        .subject-tag.phy { background: #3498db; }
+        .subject-tag.chem { background: #2ecc71; }
+        .subject-tag.bio { background: #e74c3c; }
+        .download-btn {
+            background: #0a1e3c;
+            color: white;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .download-btn:hover { background: #ff6b6b; }
+        .back-btn {
+            display: inline-block;
+            background: #0a1e3c;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+        .back-btn:hover { background: #ff6b6b; }
+        .footer {
+            background: #0a1e3c;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 50px;
+        }
+        .footer .love { color: #ff6b6b; }
+        .footer .name { color: #ffd700; font-weight: bold; }
+        @media (max-width: 600px) {
+            .pyq-item { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">Edu<span>Base</span></div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="chemistry.html">🧪 Chemistry</a>
+            <a href="physics.html">⚛️ Physics</a>
+            <a href="biology.html">🧬 Biology</a>
+            <a href="ncert-mastery.html">📂 Mastery</a>
+            <a href="pyq.html">📝 PYQs</a>
+            <a href="planner.html">📅 Planner</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">📝 Previous Year Questions</h1>
+        <p class="page-subtitle">Last 10 Years NEET PYQs with Solutions • Topic-wise Segregation</p>
+
+        <!-- Filter Buttons -->
+        <div class="card">
+            <h2>🔍 Filter by Subject</h2>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <button onclick="filterPYQ('all')" style="padding:10px 25px; border:none; border-radius:30px; background:#0a1e3c; color:white; cursor:pointer; font-weight:bold;">📚 All</button>
+                <button onclick="filterPYQ('physics')" style="padding:10px 25px; border:none; border-radius:30px; background:#3498db; color:white; cursor:pointer; font-weight:bold;">⚛️ Physics</button>
+                <button onclick="filterPYQ('chemistry')" style="padding:10px 25px; border:none; border-radius:30px; background:#2ecc71; color:white; cursor:pointer; font-weight:bold;">🧪 Chemistry</button>
+                <button onclick="filterPYQ('biology')" style="padding:10px 25px; border:none; border-radius:30px; background:#e74c3c; color:white; cursor:pointer; font-weight:bold;">🧬 Biology</button>
+            </div>
+        </div>
+
+        <!-- PYQ List -->
+        <div class="card" id="pyqList">
+            <h2>📅 Year-wise PYQs</h2>
+            
+            <div class="pyq-item" data-subject="physics">
+                <span>📄 NEET 2024 Physics Paper with Solutions</span>
+                <div>
+                    <span class="subject-tag phy">Physics</span>
+                    <span class="year">2024</span>
+                    <button class="download-btn" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ Download</button>
+                </div>
+            </div>
+
+            <div class="pyq-item" data-subject="chemistry">
+                <span>📄 NEET 2024 Chemistry Paper with Solutions</span>
+                <div>
+                    <span class="subject-tag chem">Chemistry</span>
+                    <span class="year">2024</span>
+                    <button class="download-btn" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ Download</button>
+                </div>
+            </div>
+
+            <div class="pyq-item" data-subject="biology">
+                <span>📄 NEET 2024 Biology Paper with Solutions</span>
+                <div>
+                    <span class="subject-tag bio">Biology</span>
+                    <span class="year">2024</span>
+                    <button class="download-btn" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ Download</button>
+                </div>
+            </div>
+
+            <div class="pyq-item" data-subject="physics">
+                <span>📄 NEET 2023 Physics Paper with Solutions</span>
+                <div>
+                    <span class="subject-tag phy">Physics</span>
+                    <span class="year">2023</span>
+                    <button class="download-btn" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ Download</button>
+                </div>
+            </div>
+
+            <div class="pyq-item" data-subject="chemistry">
+                <span>📄 NEET 2023 Chemistry Paper with Solutions</span>
+                <div>
+                    <span class="subject-tag chem">Chemistry</span>
+                    <span class="year">2023</span>
+                    <button class="download-btn" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ Download</button>
+                </div>
+            </div>
+
+            <div class="pyq-item" data-subject="biology">
+                <span>📄 NEET 2023 Biology Paper with Solutions</span>
+                <div>
+                    <span class="subject-tag bio">Biology</span>
+                    <span class="year">2023</span>
+                    <button class="download-btn" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ Download</button>
+                </div>
+            </div>
+
+            <div class="pyq-item" data-subject="physics">
+                <span>📄 NEET 2022 Physics Paper with Solutions</span>
+                <div>
+                    <span class="subject-tag phy">Physics</span>
+                    <span class="year">2022</span>
+                    <button class="download-btn" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ Download</button>
+                </div>
+            </div>
+
+            <div class="pyq-item" data-subject="chemistry">
+                <span>📄 NEET 2022 Chemistry Paper with Solutions</span>
+                <div>
+                    <span class="subject-tag chem">Chemistry</span>
+                    <span class="year">2022</span>
+                    <button class="download-btn" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ Download</button>
+                </div>
+            </div>
+
+            <div class="pyq-item" data-subject="biology">
+                <span>📄 NEET 2022 Biology Paper with Solutions</span>
+                <div>
+                    <span class="subject-tag bio">Biology</span>
+                    <span class="year">2022</span>
+                    <button class="download-btn" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ Download</button>
+                </div>
+            </div>
+
+            <div class="pyq-item" data-subject="physics">
+                <span>📄 NEET 2021 Physics Paper with Solutions</span>
+                <div>
+                    <span class="subject-tag phy">Physics</span>
+                    <span class="year">2021</span>
+                    <button class="download-btn" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ Download</button>
+                </div>
+            </div>
+
+            <div class="pyq-item" data-subject="chemistry">
+                <span>📄 NEET 2021 Chemistry Paper with Solutions</span>
+                <div>
+                    <span class="subject-tag chem">Chemistry</span>
+                    <span class="year">2021</span>
+                    <button class="download-btn" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ Download</button>
+                </div>
+            </div>
+
+            <div class="pyq-item" data-subject="biology">
+                <span>📄 NEET 2021 Biology Paper with Solutions</span>
+                <div>
+                    <span class="subject-tag bio">Biology</span>
+                    <span class="year">2021</span>
+                    <button class="download-btn" onclick="alert('📥 Download starting... (PDF link will be added)')">⬇ Download</button>
+                </div>
+            </div>
+
+            <div style="text-align: center; padding: 25px; color: #999;">
+                📥 More papers and PDF downloads coming soon... 🚀
+            </div>
+        </div>
+
+        <a href="index.html" class="back-btn">⬅ Back to Home</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Made with <span class="love">❤️</span> by <span class="name">Mohak Bawane</span></p>
+        <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 5px;">EduBase - Sab kuch Free hai for Future Doctors</p>
+    </div>
+
+    <script>
+        function filterPYQ(subject) {
+            const items = document.querySelectorAll('.pyq-item');
+            items.forEach(item => {
+                if (subject === 'all') {
+                    item.style.display = 'flex';
+                } else {
+                    if (item.dataset.subject === subject) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduBase - NEET PCB Hub</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f0f4f8; }
+        .navbar {
+            background: #0a1e3c;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .navbar .logo {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .navbar .logo span { color: #ff6b6b; }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 30px;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+        .nav-links a:hover {
+            background: #ff6b6b;
+            transform: scale(1.05);
+        }
+        .profile-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 1rem;
+        }
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ff6b6b;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.3rem;
+            border: 2px solid white;
+            transition: 0.3s;
+        }
+        .profile-avatar:hover {
+            transform: scale(1.1);
+            border-color: #ff6b6b;
+        }
+        .profile-name-display {
+            color: white;
+            font-size: 0.9rem;
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s ease;
+            position: relative;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #999;
+            transition: 0.3s;
+            background: none;
+            border: none;
+        }
+        .modal-close:hover { color: #ff6b6b; }
+        .modal-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #0a1e3c;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 0 auto 15px;
+            border: 4px solid #ff6b6b;
+            overflow: hidden;
+        }
+        .modal-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .modal-content h2 {
+            color: #0a1e3c;
+            margin-bottom: 5px;
+        }
+        .modal-content .email-text {
+            color: #777;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        .modal-content label {
+            display: block;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+        .modal-content input[type="text"],
+        .modal-content input[type="email"],
+        .modal-content input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        .modal-content input:focus {
+            border-color: #0a1e3c;
+            outline: none;
+        }
+        .modal-content .optional {
+            color: #999;
+            font-weight: normal;
+            font-size: 0.8rem;
+        }
+        .save-btn {
+            background: #0a1e3c;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+            width: 100%;
+        }
+        .save-btn:hover { background: #ff6b6b; }
+        .hero {
+            background: linear-gradient(135deg, #0a1e3c, #1a3a6c);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .hero h1 { font-size: 3rem; }
+        .hero h1 span { color: #ff6b6b; }
+        .hero p { font-size: 1.3rem; margin-top: 15px; opacity: 0.9; }
+        .container {
+            max-width: 1300px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            border-top: 6px solid #0a1e3c;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        .card h2 { color: #0a1e3c; margin-bottom: 10px; }
+        .card p { color: #555; margin-bottom: 15px; }
+        .card .btn {
+            display: inline-block;
+            background: #0a1e3c;
+            color: white;
+            padding: 10px 25px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .card .btn:hover { background: #ff6b6b; }
+        .card-chem { border-top-color: #2ecc71; }
+        .card-phy { border-top-color: #3498db; }
+        .card-bio { border-top-color: #e74c3c; }
+        .card-mastery { border-top-color: #f39c12; }
+        .card-pyq { border-top-color: #9b59b6; }
+        .card-planner { border-top-color: #1abc9c; }
+        .card-doubt { border-top-color: #ff6b6b; }
+        .doubt-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: #0a1e3c;
+            color: white;
+            border: none;
+            padding: 18px 25px;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(10, 30, 60, 0.4);
+            transition: 0.3s;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .doubt-float:hover {
+            transform: scale(1.08);
+            background: #ff6b6b;
+        }
+        .doubt-float .icon {
+            font-size: 1.5rem;
+        }
+        .doubt-modal .modal-content {
+            max-width: 550px;
+        }
+        .doubt-modal textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            min-height: 120px;
+            resize: vertical;
+            margin-top: 5px;
+            font-family: inherit;
+        }
+        .doubt-modal textarea:focus {
+            border-color: #0a1e3c;
+            outline: none;
+        }
+        .doubt-modal .subject-select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            margin-top: 5px;
+            background: white;
+        }
+        .doubt-modal .subject-select:focus {
+            border-color: #0a1e3c;
+            outline: none;
+        }
+        .doubt-list {
+            margin-top: 20px;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .doubt-item {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border-left: 4px solid #0a1e3c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .doubt-item .doubt-text {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+        .doubt-item .doubt-subject {
+            font-size: 0.75rem;
+            background: #0a1e3c;
+            color: white;
+            padding: 3px 12px;
+            border-radius: 20px;
+            margin-left: 10px;
+        }
+        .doubt-item .delete-doubt {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-left: 10px;
+        }
+        .doubt-item .delete-doubt:hover {
+            transform: scale(1.1);
+        }
+        .doubt-empty {
+            color: #999;
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+        }
+        .footer {
+            background: #0a1e3c;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 50px;
+        }
+        .footer .love {
+            color: #ff6b6b;
+        }
+        .footer .name {
+            color: #ffd700;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">Edu<span>Base</span></div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="chemistry.html">🧪 Chemistry</a>
+            <a href="physics.html">⚛️ Physics</a>
+            <a href="biology.html">🧬 Biology</a>
+            <a href="ncert-mastery.html">📂 Mastery</a>
+            <a href="pyq.html">📝 PYQs</a>
+            <a href="planner.html">📅 Planner</a>
+            <button class="profile-btn" onclick="openProfile()">
+                <div class="profile-avatar" id="profileAvatar">?</div>
+                <span class="profile-name-display" id="profileNameDisplay">Guest</span>
+            </button>
+        </div>
+    </div>
+    <div class="hero">
+        <h1>🚀 <span>EduBase</span> - NEET PCB</h1>
+        <p>Physics • Chemistry • Biology - All in One Place with Smart Tools</p>
+    </div>
+    <div class="container">
+        <div class="card card-chem">
+            <h2>🧪 Chemistry</h2>
+            <p>3D Periodic Table • NCERT Notes • Formula Sheets</p>
+            <a href="chemistry.html" class="btn">Explore →</a>
+        </div>
+        <div class="card card-phy">
+            <h2>⚛️ Physics</h2>
+            <p>Formula Locker • Calculator • Unit Converter</p>
+            <a href="physics.html" class="btn">Explore →</a>
+        </div>
+        <div class="card card-bio">
+            <h2>🧬 Biology</h2>
+            <p>3D Diagrams • Concept Tadka • NCERT Notes</p>
+            <a href="biology.html" class="btn">Explore →</a>
+        </div>
+        <div class="card card-mastery">
+            <h2>📂 NCERT Mastery</h2>
+            <p>Phy, Chem, Bio ke Chapter-wise Short Notes</p>
+            <a href="ncert-mastery.html" class="btn">Open →</a>
+        </div>
+        <div class="card card-pyq">
+            <h2>📝 PYQ Section</h2>
+            <p>Last 10 Years NEET PYQs with Solutions</p>
+            <a href="pyq.html" class="btn">Solve →</a>
+        </div>
+        <div class="card card-planner">
+            <h2>📅 Study Planner</h2>
+            <p>Focus Timer • Backlog Blaster • Daily Tracker</p>
+            <a href="planner.html" class="btn">Plan →</a>
+        </div>
+        <div class="card card-doubt">
+            <h2>❓ Doubt Solver</h2>
+            <p>Apni doubts likho, subject-wise organize karo</p>
+            <button class="btn" onclick="openDoubt()">Ask Doubt →</button>
+        </div>
+    </div>
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProfile()">✕</button>
+            <div class="modal-avatar" id="modalAvatar">
+                <span id="modalAvatarText">?</span>
+            </div>
+            <h2 id="modalName">Guest</h2>
+            <p class="email-text" id="modalEmail">No email set</p>
+            <label>👤 Full Name <span style="color:#ff6b6b;">*</span></label>
+            <input type="text" id="profileNameInput" placeholder="Apna naam likho...">
+            <label>📧 Email <span class="optional">(Optional)</span></label>
+            <input type="email" id="profileEmailInput" placeholder="Email dalo ya chhodo...">
+            <label>🖼️ Profile Picture <span class="optional">(Optional)</span></label>
+            <input type="file" id="profilePicInput" accept="image/*">
+            <button class="save-btn" onclick="saveProfile()">💾 Save Profile</button>
+        </div>
+    </div>
+    <button class="doubt-float" onclick="openDoubt()">
+        <span class="icon">❓</span> Ask Doubt
+    </button>
+    <div class="modal doubt-modal" id="doubtModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeDoubt()">✕</button>
+            <h2 style="color:#0a1e3c;">❓ Doubt Solver</h2>
+            <p style="color:#777; margin-bottom: 15px;">Apni doubt likho aur subject select karo</p>
+            <label>📚 Subject</label>
+            <select class="subject-select" id="doubtSubject">
+                <option value="Physics">⚛️ Physics</option>
+                <option value="Chemistry">🧪 Chemistry</option>
+                <option value="Biology">🧬 Biology</option>
+                <option value="General">📚 General</option>
+            </select>
+            <label>✍️ Your Doubt</label>
+            <textarea id="doubtInput" placeholder="Kya samajh nahi aaya? Yahan likho..."></textarea>
+            <button class="save-btn" onclick="addDoubt()" style="margin-top: 15px;">➕ Add Doubt</button>
+            <div class="doubt-list" id="doubtList">
+                <div class="doubt-empty">No doubts yet. Ask your first doubt! 🚀</div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Made with <span class="love">❤️</span> by <span class="name">Mohak Bawane</span></p>
+        <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 5px;">EduBase - Sab kuch Free hai for Future Doctors</p>
+    </div>
+    <script>
+        function loadProfile() {
+            const name = localStorage.getItem('profileName') || 'Guest';
+            const email = localStorage.getItem('profileEmail') || '';
+            const pic = localStorage.getItem('profilePic') || '';
+            const avatar = document.getElementById('profileAvatar');
+            const avatarText = document.getElementById('modalAvatarText');
+            const displayName = document.getElementById('profileNameDisplay');
+            const modalName = document.getElementById('modalName');
+            const modalEmail = document.getElementById('modalEmail');
+            if (pic) {
+                avatar.innerHTML = `<img src="${pic}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+                document.getElementById('modalAvatar').innerHTML = `<img src="${pic}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+            } else {
+                const firstLetter = name.charAt(0).toUpperCase();
+                avatar.textContent = firstLetter;
+                avatarText.textContent = firstLetter;
+            }
+            displayName.textContent = name;
+            modalName.textContent = name;
+            modalEmail.textContent = email || 'No email set';
+            document.getElementById('profileNameInput').value = name;
+            document.getElementById('profileEmailInput').value = email;
+        }
+        function openProfile() {
+            document.getElementById('profileModal').classList.add('active');
+            loadProfile();
+        }
+        function closeProfile() {
+            document.getElementById('profileModal').classList.remove('active');
+        }
+        function saveProfile() {
+            const name = document.getElementById('profileNameInput').value.trim();
+            const email = document.getElementById('profileEmailInput').value.trim();
+            const fileInput = document.getElementById('profilePicInput');
+            if (!name) {
+                alert('⚠️ Please enter your name!');
+                return;
+            }
+            localStorage.setItem('profileName', name);
+            localStorage.setItem('profileEmail', email);
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    localStorage.setItem('profilePic', e.target.result);
+                    loadProfile();
+                    closeProfile();
+                    alert('✅ Profile saved successfully!');
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                loadProfile();
+                closeProfile();
+                alert('✅ Profile saved successfully!');
+            }
+        }
+        function loadDoubts() {
+            const doubts = JSON.parse(localStorage.getItem('doubts')) || [];
+            const list = document.getElementById('doubtList');
+            if (doubts.length === 0) {
+                list.innerHTML = '<div class="doubt-empty">No doubts yet. Ask your first doubt! 🚀</div>';
+                return;
+            }
+            list.innerHTML = doubts.map((doubt, index) => `
+                <div class="doubt-item">
+                    <span class="doubt-text">${doubt.text}</span>
+                    <span class="doubt-subject">${doubt.subject}</span>
+                    <button class="delete-doubt" onclick="deleteDoubt(${index})">✕</button>
+                </div>
+            `).join('');
+        }
+        function addDoubt() {
+            const subject = document.getElementById('doubtSubject').value;
+            const text = document.getElementById('doubtInput').value.trim();
+            if (!text) {
+                alert('⚠️ Please write your doubt first!');
+                return;
+            }
+            const doubts = JSON.parse(localStorage.getItem('doubts')) || [];
+            doubts.push({ subject, text, timestamp: new Date().toISOString() });
+            localStorage.setItem('doubts', JSON.stringify(doubts));
+            document.getElementById('doubtInput').value = '';
+            loadDoubts();
+            alert('✅ Doubt added successfully!');
+        }
+        function deleteDoubt(index) {
+            const doubts = JSON.parse(localStorage.getItem('doubts')) || [];
+            doubts.splice(index, 1);
+            localStorage.setItem('doubts', JSON.stringify(doubts));
+            loadDoubts();
+        }
+        function openDoubt() {
+            document.getElementById('doubtModal').classList.add('active');
+            loadDoubts();
+        }
+        function closeDoubt() {
+            document.getElementById('doubtModal').classList.remove('active');
+        }
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+        loadProfile();
+        loadDoubts();
+    </script>
+</body>
+</html>
