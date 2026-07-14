@@ -6,7 +6,8 @@
     <title>EduBase - Study Planner</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: #f0f4f8; }
+        body { background: #f0f4f8; transition: background 0.5s; }
+        
         .navbar {
             background: #0a1e3c;
             padding: 15px 30px;
@@ -31,8 +32,9 @@
             font-weight: 500;
         }
         .nav-links a:hover { background: #ff6b6b; }
+
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 40px auto;
             padding: 0 20px;
         }
@@ -48,6 +50,7 @@
             font-size: 1.1rem;
             text-align: center;
         }
+
         .card {
             background: white;
             padding: 30px;
@@ -57,7 +60,31 @@
             text-align: center;
         }
         .card h2 { color: #0a1e3c; margin-bottom: 20px; }
-        
+
+        /* Timer Tabs */
+        .timer-tabs {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .timer-tabs button {
+            padding: 12px 30px;
+            border: 2px solid #0a1e3c;
+            border-radius: 30px;
+            background: white;
+            color: #0a1e3c;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .timer-tabs button:hover { background: #0a1e3c; color: white; }
+        .timer-tabs button.active {
+            background: #0a1e3c;
+            color: white;
+        }
+
         /* Timer Display */
         .timer-display {
             font-size: 5rem;
@@ -67,20 +94,93 @@
             padding: 20px 40px;
             border-radius: 20px;
             display: inline-block;
-            min-width: 250px;
-            margin: 20px 0;
+            min-width: 280px;
+            margin: 15px 0;
             font-family: 'Courier New', monospace;
+            transition: 0.3s;
         }
         .timer-status {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #555;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+            font-weight: 600;
         }
+
+        /* Custom Time Inputs */
+        .time-inputs {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        .time-inputs .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .time-inputs .input-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #555;
+        }
+        .time-inputs .input-group input {
+            width: 80px;
+            padding: 10px 12px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1.5rem;
+            text-align: center;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .time-inputs .input-group input:focus {
+            border-color: #0a1e3c;
+            outline: none;
+        }
+        .time-colon {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #0a1e3c;
+            padding-bottom: 15px;
+        }
+
+        /* Preset Buttons */
+        .preset-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+        .preset-group button {
+            padding: 8px 20px;
+            border: 2px solid #0a1e3c;
+            border-radius: 20px;
+            background: white;
+            color: #0a1e3c;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .preset-group button:hover {
+            background: #0a1e3c;
+            color: white;
+        }
+        .preset-group button.active {
+            background: #0a1e3c;
+            color: white;
+        }
+
+        /* Buttons */
         .btn-group {
             display: flex;
             gap: 12px;
             justify-content: center;
             flex-wrap: wrap;
+            margin-top: 10px;
         }
         .btn-group button {
             padding: 14px 35px;
@@ -91,14 +191,29 @@
             cursor: pointer;
             transition: 0.3s;
         }
+        .btn-group button:hover { transform: scale(1.05); }
         .btn-start { background: #2ecc71; color: white; }
-        .btn-start:hover { background: #27ae60; transform: scale(1.05); }
+        .btn-start:hover { background: #27ae60; }
         .btn-pause { background: #f39c12; color: white; }
-        .btn-pause:hover { background: #d68910; transform: scale(1.05); }
+        .btn-pause:hover { background: #d68910; }
         .btn-reset { background: #e74c3c; color: white; }
-        .btn-reset:hover { background: #c0392b; transform: scale(1.05); }
-        
-        /* Backlog Blaster */
+        .btn-reset:hover { background: #c0392b; }
+        .btn-set { background: #0a1e3c; color: white; }
+        .btn-set:hover { background: #1a3a6c; }
+
+        /* Pomodoro Break Indicator */
+        .pomodoro-phase {
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 8px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .phase-study { background: #2ecc71; color: white; }
+        .phase-break { background: #f39c12; color: white; }
+
+        /* Backlog */
         .backlog-input {
             display: flex;
             gap: 12px;
@@ -129,7 +244,7 @@
             transition: 0.3s;
         }
         .backlog-input button:hover { background: #ff6b6b; }
-        
+
         .backlog-stats {
             display: flex;
             justify-content: space-between;
@@ -138,7 +253,7 @@
             color: #555;
         }
         .backlog-stats span { font-weight: bold; color: #0a1e3c; }
-        
+
         .backlog-list {
             list-style: none;
             padding: 0;
@@ -159,14 +274,8 @@
             gap: 8px;
         }
         .backlog-list li:hover { background: #f0f4f8; }
-        .backlog-list li .task-text {
-            flex: 1;
-            font-size: 0.95rem;
-        }
-        .backlog-list li .task-actions {
-            display: flex;
-            gap: 6px;
-        }
+        .backlog-list li .task-text { flex: 1; font-size: 0.95rem; }
+        .backlog-list li .task-actions { display: flex; gap: 6px; }
         .backlog-list li .done-btn {
             background: #2ecc71;
             color: white;
@@ -194,14 +303,13 @@
             border-left-color: #2ecc71;
             text-decoration: line-through;
         }
-        
         .backlog-empty {
             color: #999;
             text-align: center;
             padding: 30px;
             font-style: italic;
         }
-        
+
         .back-btn {
             display: inline-block;
             background: #0a1e3c;
@@ -214,6 +322,7 @@
             margin-top: 20px;
         }
         .back-btn:hover { background: #ff6b6b; }
+
         .footer {
             background: #0a1e3c;
             color: white;
@@ -223,13 +332,20 @@
         }
         .footer .love { color: #ff6b6b; }
         .footer .name { color: #ffd700; font-weight: bold; }
-        
+
         @media (max-width: 600px) {
             .timer-display { font-size: 3.5rem; min-width: 180px; padding: 15px 20px; }
             .btn-group button { padding: 12px 20px; font-size: 0.95rem; }
+            .time-inputs .input-group input { width: 60px; font-size: 1.2rem; }
             .backlog-list li { flex-direction: column; align-items: flex-start; }
             .backlog-list li .task-actions { width: 100%; justify-content: flex-end; }
         }
+
+        body.timer-running { background: #e8f8f0; }
+        body.timer-paused { background: #fff8e8; }
+        body.timer-ended { background: #ffe8e8; }
+
+        .timer-hidden { display: none; }
     </style>
 </head>
 <body>
@@ -251,28 +367,65 @@
     <!-- Main Content -->
     <div class="container">
         <h1 class="page-title">📅 Study Planner</h1>
-        <p class="page-subtitle">Focus Timer + Backlog Blaster for NEET 2027</p>
+        <p class="page-subtitle">Custom Timer + Pomodoro Timer + Backlog Blaster</p>
 
-        <!-- Pomodoro Timer -->
+        <!-- ===== TIMER CARD ===== -->
         <div class="card">
             <h2>⏰ Focus Timer</h2>
+
+            <!-- Timer Tabs -->
+            <div class="timer-tabs">
+                <button class="active" onclick="switchTimer('custom', this)">🎯 Custom Timer</button>
+                <button onclick="switchTimer('pomodoro', this)">🍅 Pomodoro (25/5)</button>
+            </div>
+
+            <!-- Pomodoro Phase Indicator -->
+            <div id="pomodoroPhase" class="pomodoro-phase phase-study timer-hidden">📖 Study Time</div>
+
+            <!-- Timer Display -->
             <div class="timer-status" id="timerStatus">Ready to focus 🎯</div>
             <div class="timer-display" id="timerDisplay">25:00</div>
+
+            <!-- Custom Timer Inputs -->
+            <div id="customInputs" class="time-inputs">
+                <div class="input-group">
+                    <label>⏱️ Minutes</label>
+                    <input type="number" id="minutesInput" value="25" min="0" max="999">
+                </div>
+                <span class="time-colon">:</span>
+                <div class="input-group">
+                    <label>⏱️ Seconds</label>
+                    <input type="number" id="secondsInput" value="0" min="0" max="59">
+                </div>
+            </div>
+
+            <!-- Preset Buttons -->
+            <div id="presetButtons" class="preset-group">
+                <button onclick="setPreset(1, 0)">⏱️ 1 min</button>
+                <button onclick="setPreset(5, 0)">⏱️ 5 min</button>
+                <button onclick="setPreset(25, 0)" class="active">⏱️ 25 min</button>
+                <button onclick="setPreset(45, 0)">⏱️ 45 min</button>
+                <button onclick="setPreset(60, 0)">⏱️ 60 min</button>
+            </div>
+
+            <!-- Timer Controls -->
             <div class="btn-group">
                 <button class="btn-start" onclick="startTimer()">▶ Start</button>
                 <button class="btn-pause" onclick="pauseTimer()">⏸ Pause</button>
                 <button class="btn-reset" onclick="resetTimer()">⏹ Reset</button>
+                <button class="btn-set" onclick="setCustomTime()">🔄 Apply</button>
             </div>
-            <div style="margin-top: 15px; font-size: 0.9rem; color: #888;">
-                🎯 25 min study → 5 min break
+
+            <div style="margin-top: 15px; font-size: 0.85rem; color: #888;">
+                🎯 Custom Timer: Time set karo | Pomodoro: 25 min study + 5 min break
             </div>
         </div>
 
-        <!-- Backlog Blaster -->
+        <!-- ===== BACKLOG BLASTER ===== -->
         <div class="card">
             <h2>📋 Backlog Blaster</h2>
             <p style="color:#777; margin-bottom: 15px;">Apne pending chapters/subjects yahan add karo aur complete karo!</p>
-            
+
             <div class="backlog-input">
                 <input type="text" id="backlogInput" placeholder="e.g. Physics - Chapter 3 (Motion)" onkeypress="if(event.key==='Enter') addBacklog()">
                 <button onclick="addBacklog()">➕ Add</button>
@@ -299,46 +452,183 @@
 
     <script>
         // =============================================
-        // FOCUS TIMER
+        // TIMER ENGINE
         // =============================================
         let timer;
-        let minutes = 25;
-        let seconds = 0;
+        let totalSeconds = 1500;      // 25 minutes default
+        let remainingSeconds = 1500;
         let isRunning = false;
         let isPaused = false;
+        let currentMode = 'custom';   // 'custom' or 'pomodoro'
+        let pomodoroStudyTime = 25 * 60;  // 25 min
+        let pomodoroBreakTime = 5 * 60;   // 5 min
+        let isStudyPhase = true;
+
+        // DOM Elements
+        const timerDisplay = document.getElementById('timerDisplay');
+        const timerStatus = document.getElementById('timerStatus');
+        const customInputs = document.getElementById('customInputs');
+        const presetButtons = document.getElementById('presetButtons');
+        const pomodoroPhase = document.getElementById('pomodoroPhase');
 
         function updateTimerDisplay() {
-            document.getElementById('timerDisplay').textContent = 
-                String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+            const mins = Math.floor(remainingSeconds / 60);
+            const secs = remainingSeconds % 60;
+            timerDisplay.textContent = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
         }
 
+        function getInputTime() {
+            const mins = parseInt(document.getElementById('minutesInput').value) || 0;
+            const secs = parseInt(document.getElementById('secondsInput').value) || 0;
+            return (mins * 60) + secs;
+        }
+
+        // =============================================
+        // SWITCH BETWEEN TIMER MODES
+        // =============================================
+        function switchTimer(mode, btn) {
+            if (isRunning) {
+                alert('⏳ Timer running hai! Pehle Reset karo.');
+                return;
+            }
+            
+            currentMode = mode;
+            
+            // Update tabs
+            document.querySelectorAll('.timer-tabs button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (mode === 'custom') {
+                customInputs.style.display = 'flex';
+                presetButtons.style.display = 'flex';
+                pomodoroPhase.classList.add('timer-hidden');
+                totalSeconds = getInputTime() || 1500;
+                remainingSeconds = totalSeconds;
+                updateTimerDisplay();
+                timerStatus.textContent = '⏱️ Custom Timer Ready';
+                timerStatus.style.color = '#555';
+            } else {
+                customInputs.style.display = 'none';
+                presetButtons.style.display = 'none';
+                pomodoroPhase.classList.remove('timer-hidden');
+                isStudyPhase = true;
+                pomodoroPhase.textContent = '📖 Study Time';
+                pomodoroPhase.className = 'pomodoro-phase phase-study';
+                totalSeconds = pomodoroStudyTime;
+                remainingSeconds = totalSeconds;
+                updateTimerDisplay();
+                timerStatus.textContent = '🍅 Pomodoro Ready - Study 25 min';
+                timerStatus.style.color = '#555';
+            }
+            
+            document.body.className = '';
+        }
+
+        // =============================================
+        // CUSTOM TIMER FUNCTIONS
+        // =============================================
+        function setPreset(mins, secs) {
+            if (currentMode === 'custom') {
+                document.getElementById('minutesInput').value = mins;
+                document.getElementById('secondsInput').value = secs;
+                setCustomTime();
+                
+                document.querySelectorAll('#presetButtons button').forEach(b => b.classList.remove('active'));
+                event.target.classList.add('active');
+            }
+        }
+
+        function setCustomTime() {
+            if (isRunning) {
+                alert('⏳ Timer running hai! Pehle Reset karo.');
+                return;
+            }
+            if (currentMode !== 'custom') return;
+            
+            const total = getInputTime();
+            if (total <= 0) {
+                alert('⚠️ Please enter a valid time (greater than 0)!');
+                return;
+            }
+            if (parseInt(document.getElementById('secondsInput').value) > 59) {
+                alert('⚠️ Seconds 0-59 ke beech mein hona chahiye!');
+                return;
+            }
+            totalSeconds = total;
+            remainingSeconds = total;
+            updateTimerDisplay();
+            timerStatus.textContent = '⏱️ Time set to ' + Math.floor(total/60) + 'm ' + (total%60) + 's';
+            timerStatus.style.color = '#0a1e3c';
+            document.body.className = '';
+        }
+
+        // =============================================
+        // START / PAUSE / RESET
+        // =============================================
         function startTimer() {
             if (isRunning && !isPaused) return;
-            if (minutes === 0 && seconds === 0) {
+            if (remainingSeconds <= 0) {
                 resetTimer();
                 return;
             }
+
             isRunning = true;
             isPaused = false;
-            document.getElementById('timerStatus').textContent = '🔴 Focus time... Stay locked!';
-            document.getElementById('timerStatus').style.color = '#e74c3c';
+            timerStatus.textContent = currentMode === 'custom' ? '🔴 Focus time...' : '🍅 Studying... Stay focused!';
+            timerStatus.style.color = '#e74c3c';
+            document.body.className = 'timer-running';
 
             timer = setInterval(() => {
-                if (seconds === 0) {
-                    if (minutes === 0) {
-                        clearInterval(timer);
-                        isRunning = false;
-                        document.getElementById('timerStatus').textContent = '🎉 Time is up! Take a break!';
-                        document.getElementById('timerStatus').style.color = '#2ecc71';
-                        alert('🎉 Time is up! Take a 5-minute break!');
-                        return;
-                    }
-                    minutes--;
-                    seconds = 59;
-                } else {
-                    seconds--;
-                }
+                remainingSeconds--;
                 updateTimerDisplay();
+
+                if (remainingSeconds <= 0) {
+                    clearInterval(timer);
+                    isRunning = false;
+                    
+                    // Pomodoro phase switch
+                    if (currentMode === 'pomodoro') {
+                        if (isStudyPhase) {
+                            // Study ended -> Break
+                            isStudyPhase = false;
+                            totalSeconds = pomodoroBreakTime;
+                            remainingSeconds = totalSeconds;
+                            pomodoroPhase.textContent = '☕ Break Time!';
+                            pomodoroPhase.className = 'pomodoro-phase phase-break';
+                            timerStatus.textContent = '☕ Break time! 5 minutes';
+                            timerStatus.style.color = '#f39c12';
+                            document.body.className = 'timer-paused';
+                            updateTimerDisplay();
+                            alert('🎉 Study session complete! Take a 5-minute break!');
+                            return;
+                        } else {
+                            // Break ended -> Study
+                            isStudyPhase = true;
+                            totalSeconds = pomodoroStudyTime;
+                            remainingSeconds = totalSeconds;
+                            pomodoroPhase.textContent = '📖 Study Time';
+                            pomodoroPhase.className = 'pomodoro-phase phase-study';
+                            timerStatus.textContent = '📖 Study again! 25 minutes';
+                            timerStatus.style.color = '#2ecc71';
+                            document.body.className = 'timer-running';
+                            updateTimerDisplay();
+                            alert('☕ Break over! Time to study again! 🚀');
+                            // Auto start next study session
+                            startTimer();
+                            return;
+                        }
+                    } else {
+                        // Custom timer ended
+                        timerStatus.textContent = '🎉 Time is up!';
+                        timerStatus.style.color = '#2ecc71';
+                        document.body.className = 'timer-ended';
+                        try {
+                            const audio = new Audio('data:audio/wav;base64,UklGRnoAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoAAACBhYqFhYWQhZSFn4WchaeFpYWxha6FuYW1hcKFuoW/hcOFwIXKhdGF0YXWhd6F4oXohe6F9IX6hgCGBIYIhg+GEIYVhhuGH4YjhieGLIYyhjeGPoZDhkmGToZThleGXoZkhmaGagZxBnM=再接再厉');
+                            audio.play();
+                        } catch(e) {}
+                        alert('🎉 Time is up!');
+                    }
+                }
             }, 1000);
         }
 
@@ -346,8 +636,9 @@
             if (isRunning && !isPaused) {
                 clearInterval(timer);
                 isPaused = true;
-                document.getElementById('timerStatus').textContent = '⏸ Paused';
-                document.getElementById('timerStatus').style.color = '#f39c12';
+                timerStatus.textContent = '⏸ Paused';
+                timerStatus.style.color = '#f39c12';
+                document.body.className = 'timer-paused';
             }
         }
 
@@ -355,11 +646,24 @@
             clearInterval(timer);
             isRunning = false;
             isPaused = false;
-            minutes = 25;
-            seconds = 0;
+            
+            if (currentMode === 'custom') {
+                totalSeconds = getInputTime() || 1500;
+                remainingSeconds = totalSeconds;
+                timerStatus.textContent = 'Ready to focus 🎯';
+                timerStatus.style.color = '#555';
+            } else {
+                isStudyPhase = true;
+                totalSeconds = pomodoroStudyTime;
+                remainingSeconds = totalSeconds;
+                pomodoroPhase.textContent = '📖 Study Time';
+                pomodoroPhase.className = 'pomodoro-phase phase-study';
+                timerStatus.textContent = '🍅 Pomodoro Ready - Study 25 min';
+                timerStatus.style.color = '#555';
+            }
+            
             updateTimerDisplay();
-            document.getElementById('timerStatus').textContent = 'Ready to focus 🎯';
-            document.getElementById('timerStatus').style.color = '#555';
+            document.body.className = '';
         }
 
         // =============================================
@@ -432,8 +736,22 @@
         // =============================================
         // INITIALIZE
         // =============================================
+        // Set default custom time
+        document.getElementById('minutesInput').value = 25;
+        document.getElementById('secondsInput').value = 0;
+        totalSeconds = 1500;
+        remainingSeconds = 1500;
         updateTimerDisplay();
+        
         loadBacklog();
+
+        // Enter key se apply time ho jaye
+        document.getElementById('minutesInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') setCustomTime();
+        });
+        document.getElementById('secondsInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') setCustomTime();
+        });
     </script>
 
 </body>
