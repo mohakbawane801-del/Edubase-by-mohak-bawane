@@ -8,7 +8,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: #f0f4f8; }
 
-        /* NAVBAR */
         .navbar {
             background: #0a1e3c;
             padding: 15px 30px;
@@ -35,7 +34,6 @@
         .nav-links a:hover { background: #ff6b6b; }
         .nav-links .active { background: #ff6b6b; }
 
-        /* CONTAINER */
         .container {
             max-width: 900px;
             margin: 40px auto;
@@ -55,7 +53,6 @@
             margin-bottom: 30px;
         }
 
-        /* CARDS */
         .card {
             background: white;
             padding: 30px;
@@ -65,7 +62,6 @@
         }
         .card h2 { color: #0a1e3c; margin-bottom: 20px; }
 
-        /* SHIELD STATUS */
         .shield-status {
             text-align: center;
             padding: 25px;
@@ -95,7 +91,6 @@
         .toggle-btn.off { background: #e74c3c; color: white; }
         .toggle-btn.off:hover { background: #c0392b; }
 
-        /* VIDEO PLAYER */
         .player-input {
             display: flex;
             gap: 12px;
@@ -144,7 +139,6 @@
             margin-top: 10px;
         }
 
-        /* BLOCKED SITES LIST */
         .site-list {
             list-style: none;
             padding: 0;
@@ -310,7 +304,7 @@
             <p style="color:#555; margin-bottom: 15px;">Distracting sites add karo jo block karni hain</p>
             
             <ul class="site-list" id="siteList">
-                <li class="empty-msg">No sites blocked yet. Add some!</li>
+                <li class="empty-msg">🚀 No sites blocked yet. Add some to stay focused!</li>
             </ul>
 
             <div class="add-site">
@@ -390,7 +384,7 @@
             
             const videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?]+)/);
             if (videoId) {
-                document.getElementById('videoFrame').src = `https://www.youtube.com/embed/${videoId[1]}?autoplay=1&rel=0&showinfo=0&controls=1`;
+                document.getElementById('videoFrame').src = 'https://www.youtube.com/embed/' + videoId[1] + '?autoplay=1&rel=0&showinfo=0&controls=1';
                 document.getElementById('playerContainer').style.display = 'block';
                 document.getElementById('videoInput').value = '';
             } else {
@@ -441,7 +435,7 @@
 
         function addPreset(site) {
             if (blockedSites.includes(site)) {
-                alert(`⚠️ ${site} is already in the list!`);
+                alert('⚠️ ' + site + ' is already in the list!');
                 return;
             }
             blockedSites.push(site);
