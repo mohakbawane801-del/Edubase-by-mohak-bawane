@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduShield - Distraction Blocker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a1e3c;
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .card {
+            background: white;
+            color: black;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 { color: #ff6b6b; }
+        .btn {
+            background: #0a1e3c;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .btn:hover { background: #ff6b6b; }
+        input {
+            padding: 12px;
+            width: 80%;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        .list-item {
+            background: #f1f1f1;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .remove {
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 15px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🛡️ EduShield</h1>
+    <p>Distraction-Free Study Mode</p>
+
+    <div class="card">
+        <h2>📺 YouTube Clean Player</h2>
+        <input type="text" id="videoInput" placeholder="YouTube link daalo...">
+        <br><br>
+        <button class="btn" onclick="loadVideo()">🚀 Watch</button>
+        <div id="playerBox" style="margin-top:20px;"></div>
+    </div>
+
+    <div class="card">
+        <h2>🚫 Blocked Sites</h2>
+        <input type="text" id="siteInput" placeholder="Site name...">
+        <button class="btn" onclick="addSite()">Add</button>
+        <div id="siteList"></div>
+    </div>
+
+    <script>
+        // Video Player
+        function loadVideo() {
+            let url = document.getElementById('videoInput').value;
+            let videoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/);
+            if (videoId) {
+                document.getElementById('playerBox').innerHTML = 
+                    '<iframe width="100%" height="315" src="https://www.youtube.com/embed/' + videoId[1] + '?autoplay=1&rel=0" frameborder="0" allowfullscreen></iframe>';
+            } else {
+                alert('Invalid YouTube link!');
+            }
+        }
+
+        // Blocked Sites
+        let sites = JSON.parse(localStorage.getItem('blockedSites')) || [];
+
+        function showSites() {
+            let html = '';
+            sites.forEach((s, i) => {
+                html += '<div class="list-item"><span>🚫 ' + s + '</span><button class="remove" onclick="removeSite(' + i + ')">Remove</button></div>';
+            });
+            document.getElementById('siteList').innerHTML = html || '<p>No sites blocked.</p>';
+        }
+
+        function addSite() {
+            let site = document.getElementById('siteInput').value.trim();
+            if (site) {
+                sites.push(site);
+                localStorage.setItem('blockedSites', JSON.stringify(sites));
+                document.getElementById('siteInput').value = '';
+                showSites();
+            }
+        }
+
+        function removeSite(i) {
+            sites.splice(i, 1);
+            localStorage.setItem('blockedSites', JSON.stringify(sites));
+            showSites();
+        }
+
+        showSites();
+    </script>
+
+</body>
+</html>
