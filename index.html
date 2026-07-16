@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>EduBase - NEET Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        /* ============================================
+                   RESET & VARIABLES
+                ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        :root {
+            --bg-body: #f4f7fb;
+            --bg-card: #ffffff;
+            --bg-nav: #ffffff;
+            --text-primary: #0b1a33;
+            --text-secondary: #475569;
+            --border-light: #e9edf2;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+        }
+
+        body.dark-mode {
+            --bg-body: #0b1119;
+            --bg-card: #171f2e;
+            --bg-nav: #131b26;
+            --text-primary: #eef2f6;
+            --text-secondary: #9aa4b8;
+            --border-light: #293544;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        body {
+            background: var(--bg-body);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+                   SCROLLBAR
+                ============================================ */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-body);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        /* ============================================
+                   GLASS CARD
+                ============================================ */
+        .glass-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            transition: all 0.25s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border-color: var(--accent);
+        }
+
+        /* ============================================
+                   ANIMATION
+                ============================================ */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-in {
+            animation: fadeUp 0.5s ease forwards;
+        }
+        .delay-1 {
+            animation-delay: 0.05s;
+        }
+        .delay-2 {
+            animation-delay: 0.1s;
+        }
+        .delay-3 {
+            animation-delay: 0.15s;
+        }
+        .delay-4 {
+            animation-delay: 0.2s;
+        }
+        .delay-5 {
+            animation-delay: 0.25s;
+        }
+        .delay-6 {
+            animation-delay: 0.3s;
+        }
+
+        /* ============================================
+                   ONBOARDING MODAL
+                ============================================ */
+        .onboarding-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+        }
+        .onboarding-modal.hidden {
+            display: none;
+        }
+
+        .onboarding-box {
+            background: var(--bg-card);
+            padding: 2.5rem 2rem;
+            border-radius: 32px;
+            max-width: 440px;
+            width: 100%;
+            border: 1px solid var(--border-light);
+            animation: fadeUp 0.4s ease;
+        }
+        .onboarding-box h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-align: center;
+        }
+        .onboarding-box h2 span {
+            color: #ff6b6b;
+        }
+        .onboarding-box p {
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .option-btn {
+            padding: 12px;
+            border: 2px solid var(--border-light);
+            border-radius: 16px;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+        }
+        .option-btn:hover,
+        .option-btn.selected {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: white;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 18px;
+        }
+        .start-btn:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02);
+        }
+
+        /* ============================================
+                   NAVBAR
+                ============================================ */
+        .navbar {
+            background: var(--bg-nav);
+            border-bottom: 1px solid var(--border-light);
+            padding: 0.75rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        .logo span {
+            color: #ff6b6b;
+        }
+        .logo img {
+            height: 40px;
+            width: auto;
+            border-radius: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* ===== IOS Toggle Switch ===== */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: #cbd5e1;
+            border-radius: 30px;
+            transition: 0.3s;
+        }
+        .slider::before {
+            content: "";
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .toggle-switch input:checked+.slider {
+            background: var(--accent);
+        }
+        .toggle-switch input:checked+.slider::before {
+            transform: translateX(20px);
+        }
+
+        /* ===== Profile Avatar ===== */
+        .profile-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid white;
+            overflow: hidden;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            padding: 10px 0;
+            border-top: 1px solid var(--border-light);
+            margin-top: 6px;
+            width: 100%;
+        }
+        .mobile-menu a {
+            padding: 10px 14px;
+            border-radius: 14px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            background: var(--bg-body);
+        }
+        .mobile-menu a:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* ============================================
+                   HERO
+                ============================================ */
+        .hero {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding: 0 1.5rem;
+        }
+        .hero-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .hero h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+        .hero .sub {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .progress-bar {
+            width: 160px;
+            height: 6px;
+            background: var(--border-light);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 68%;
+            background: linear-gradient(to right, var(--accent), #60a5fa);
+            border-radius: 10px;
+        }
+
+        /* ============================================
+                   DASHBOARD GRID
+                ============================================ */
+        .dashboard {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem 3rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+        }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 4px 0;
+        }
+        .card-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .task-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .quick-grid a {
+            background: var(--bg-body);
+            padding: 12px;
+            border-radius: 16px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .quick-grid a:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.04);
+        }
+        .quick-grid a span {
+            display: block;
+            font-size: 1.6rem;
+        }
+
+        .doubt-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--bg-body);
+            border-radius: 12px;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .doubt-item .status {
+            font-size: 0.7rem;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+        .status.pending {
+            background: #facc15;
+            color: #422006;
+        }
+        .status.resolved {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn-text {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .btn-text:hover {
+            color: var(--accent-hover);
+        }
+
+        /* ============================================
+                   DOUBT FLOATING BUTTON
+                ============================================ */
+        .doubt-float {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            z-index: 999;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 14px 22px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            transition: 0.2s;
+        }
+        .doubt-float:hover {
+            transform: scale(1.06);
+            background: var(--accent-hover);
+        }
+
+        /* ============================================
+                   MODALS
+                ============================================ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            padding: 1rem;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 28px;
+            max-width: 440px;
+            width: 100%;
+            border: 1px solid var(--border-light);
+            animation: fadeUp 0.3s ease;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 1.6rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+        }
+        .modal-close:hover {
+            color: #ff6b6b;
+        }
+        .modal-box h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .modal-box .sub-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+        }
+        .modal-box input,
+        .modal-box select,
+        .modal-box textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--border-light);
+            border-radius: 16px;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+        .modal-box input:focus,
+        .modal-box select:focus,
+        .modal-box textarea:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+        .modal-box textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .modal-avatar-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 auto 12px;
+            border: 3px solid var(--accent);
+            overflow: hidden;
+        }
+        .modal-avatar-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            font-size: 1rem;
+        }
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        /* ============================================
+                   FOOTER
+                ============================================ */
+        .footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid var(--border-light);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .footer .love {
+            color: #ff6b6b;
+        }
+        .footer .name {
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        /* ============================================
+                   RESPONSIVE
+                ============================================ */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .hamburger {
+                display: block;
+            }
+            .mobile-menu.open {
+                display: flex;
+            }
+            .hero h1 {
+                font-size: 1.4rem;
+            }
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            .option-group {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .option-group {
+                grid-template-columns: 1fr;
+            }
+            .onboarding-box {
+                padding: 1.5rem 1rem;
+            }
+            .navbar {
+                padding: 0.5rem 1rem;
+            }
+            .logo {
+                font-size: 1.2rem;
+            }
+            .logo img {
+                height: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================
+    ONBOARDING MODAL (Class 11/12 + NEET ONLY)
+    ============================================ -->
+    <div class="onboarding-modal" id="onboardingModal">
+        <div class="onboarding-box">
+            <h2>🎯 <span>EduBase</span> Welcome!</h2>
+            <p>Personalize your NEET prep experience</p>
+
+            <label style="font-weight:600; font-size:0.9rem;">📚 Select Your Class</label>
+            <div class="option-group" id="classGroup">
+                <button class="option-btn" data-value="11th">11th</button>
+                <button class="option-btn" data-value="12th">12th</button>
+            </div>
+
+            <label style="font-weight:600; font-size:0.9rem; display:block; margin-top:12px;">🎯 Select Your Stream</label>
+            <div class="option-group" id="streamGroup">
+                <button class="option-btn" data-value="NEET">🎯 NEET</button>
+            </div>
+
+            <button class="start-btn" onclick="completeOnboarding()">🚀 Start My Journey</button>
+        </div>
+    </div>
+
+    <!-- ============================================
+    NAVBAR
+    ============================================ -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <!-- 🔥 APNA LOGO: logo.png file folder mein daalo 🔥 -->
+            <img src="logo.png" alt="EduBase Logo" />
+            Edu<span>Base</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="index.html" class="active">🏠 Home</a>
+            <a href="chemistry.html">🧪 Chemistry</a>
+            <a href="physics.html">⚛️ Physics</a>
+            <a href="biology.html">🧬 Biology</a>
+            <a href="planner.html">📅 Planner</a>
+            <a href="edushield.html">🛡️ Shield</a>
+        </div>
+
+        <div class="nav-right">
+            <!-- Dark Mode Toggle -->
+            <label class="toggle-switch">
+                <input type="checkbox" id="themeToggle" onchange="toggleTheme()" />
+                <span class="slider"></span>
+            </label>
+
+            <!-- Profile Avatar -->
+            <div class="profile-avatar" id="profileAvatarNav" onclick="openProfile()">?</div>
+
+            <!-- Hamburger -->
+            <button class="hamburger" onclick="toggleMobile()">☰</button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html">🏠 Home</a>
+            <a href="chemistry.html">🧪 Chemistry</a>
+            <a href="physics.html">⚛️ Physics</a>
+            <a href="biology.html">🧬 Biology</a>
+            <a href="planner.html">📅 Planner</a>
+            <a href="edushield.html">🛡️ Shield</a>
+        </div>
+    </nav>
+
+    <!-- ============================================
+    HERO
+    ============================================ -->
+    <section class="hero">
+        <div class="glass-card hero-content animate-in">
+            <div>
+                <h1>👋 Good Morning, <span id="userNameDisplay">NEET Aspirant</span>!</h1>
+                <p class="sub" id="userClassDisplay">Class: 12th | Stream: NEET</p>
+            </div>
+            <div>
+                <p style="font-weight:600; font-size:0.9rem;">📊 Progress</p>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <p style="font-size:0.75rem; color:var(--text-secondary);">68% Completed</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+    DASHBOARD
+    ============================================ -->
+    <section class="dashboard">
+
+        <!-- Card 1: Workspace -->
+        <div class="glass-card animate-in delay-1">
+            <div class="card-icon">📋</div>
+            <div class="card-title">My Workspace</div>
+            <div class="task-item"><input type="checkbox" /> Physics - Ch 3 (Motion)</div>
+            <div class="task-item"><input type="checkbox" /> Chemistry - Atomic Structure</div>
+            <div class="task-item"><input type="checkbox" /> Biology - Cell Division</div>
+            <button class="btn-text" style="margin-top:8px;">+ Add Task</button>
+        </div>
+
+        <!-- Card 2: Quick Tools -->
+        <div class="glass-card animate-in delay-2">
+            <div class="card-icon">⚡</div>
+            <div class="card-title">Quick Tools</div>
+            <div class="quick-grid">
+                <a href="planner.html"><span>⏰</span> Timer</a>
+                <a href="pyq.html"><span>📝</span> PYQs</a>
+                <a href="edushield.html"><span>🛡️</span> Shield</a>
+                <a href="#"><span>📊</span> Stats</a>
+            </div>
+        </div>
+
+        <!-- Card 3: Doubt Corner -->
+        <div class="glass-card animate-in delay-3">
+            <div class="card-icon">💬</div>
+            <div class="card-title">Doubt Corner</div>
+            <div class="doubt-item">
+                <span>⚛️ Electrostatics</span>
+                <span class="status pending">Pending</span>
+            </div>
+            <div class="doubt-item">
+                <span>🧪 Chemical Bonding</span>
+                <span class="status resolved">Resolved</span>
+            </div>
+            <button class="btn-text" onclick="openDoubt()">+ Ask New Doubt</button>
+        </div>
+
+        <!-- Card 4: Study Material -->
+        <div class="glass-card animate-in delay-4">
+            <div class="card-icon">📚</div>
+            <div class="card-title">Study Material</div>
+            <div style="display:flex; justify-content:space-between; padding:6px 0; color:var(--text-secondary); font-size:0.9rem; border-bottom:1px solid var(--border-light);">
+                <span>⚛️ Physics</span> <span style="background:var(--accent); color:white; padding:2px 12px; border-radius:30px; font-size:0.7rem;">12 Ch</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:6px 0; color:var(--text-secondary); font-size:0.9rem; border-bottom:1px solid var(--border-light);">
+                <span>🧪 Chemistry</span> <span style="background:#22c55e; color:white; padding:2px 12px; border-radius:30px; font-size:0.7rem;">10 Ch</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:6px 0; color:var(--text-secondary); font-size:0.9rem;">
+                <span>🧬 Biology</span> <span style="background:#ef4444; color:white; padding:2px 12px; border-radius:30px; font-size:0.7rem;">15 Ch</span>
+            </div>
+        </div>
+
+        <!-- Card 5: Progress -->
+        <div class="glass-card animate-in delay-5">
+            <div class="card-icon">📈</div>
+            <div class="card-title">Your Progress</div>
+            <div style="margin-bottom:12px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-secondary);">
+                    <span>Physics</span> <span>65%</span>
+                </div>
+                <div class="progress-bar" style="width:100%;">
+                    <div class="progress-fill" style="width:65%; background:var(--accent);"></div>
+                </div>
+            </div>
+            <div style="margin-bottom:12px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-secondary);">
+                    <span>Chemistry</span> <span>72%</span>
+                </div>
+                <div class="progress-bar" style="width:100%;">
+                    <div class="progress-fill" style="width:72%; background:#22c55e;"></div>
+                </div>
+            </div>
+            <div>
+                <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-secondary);">
+                    <span>Biology</span> <span>58%</span>
+                </div>
+                <div class="progress-bar" style="width:100%;">
+                    <div class="progress-fill" style="width:58%; background:#ef4444;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 6: Resources -->
+        <div class="glass-card animate-in delay-6">
+            <div class="card-icon">🎯</div>
+            <div class="card-title">Quick Resources</div>
+            <div class="quick-grid">
+                <a href="ncert-mastery.html"><span>📂</span> NCERT</a>
+                <a href="pyq.html"><span>📝</span> PYQs</a>
+                <a href="#"><span>📖</span> Formulas</a>
+                <a href="#"><span>🧠</span> Flashcards</a>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ============================================
+    DOUBT FLOATING BUTTON
+    ============================================ -->
+    <button class="doubt-float" onclick="openDoubt()">❓ Ask Doubt</button>
+
+    <!-- ============================================
+    DOUBT MODAL
+    ============================================ -->
+    <div class="modal-overlay" id="doubtModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeDoubt()">✕</button>
+            <h3>❓ Doubt Solver</h3>
+            <p class="sub-text">Apni doubt likho aur subject select karo</p>
+            <select id="doubtSubject">
+                <option value="Physics">⚛️ Physics</option>
+                <option value="Chemistry">🧪 Chemistry</option>
+                <option value="Biology">🧬 Biology</option>
+                <option value="General">📚 General</option>
+            </select>
+            <textarea id="doubtInput" placeholder="Write your doubt here..."></textarea>
+            <button class="btn-primary" onclick="addDoubt()">➕ Add Doubt</button>
+            <div id="doubtList" style="margin-top:14px; max-height:140px; overflow-y:auto;"></div>
+        </div>
+    </div>
+
+    <!-- ============================================
+    PROFILE MODAL
+    ============================================ -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeProfile()">✕</button>
+            <div style="text-align:center;">
+                <div class="modal-avatar-large" id="modalAvatar">?</div>
+                <h3 id="modalName">Guest</h3>
+                <p class="sub-text" id="modalEmail">No email set</p>
+            </div>
+            <input type="text" id="profileNameInput" placeholder="Full Name" />
+            <input type="email" id="profileEmailInput" placeholder="Email (optional)" />
+            <input type="file" id="profilePicInput" accept="image/*" />
+            <button class="btn-primary" onclick="saveProfile()">💾 Save Profile</button>
+        </div>
+    </div>
+
+    <!-- ============================================
+    FOOTER
+    ============================================ -->
+    <footer class="footer">
+        <p>Made with <span class="love">❤️</span> by <span class="name">Mohak Bawane</span></p>
+        <p style="font-size:0.8rem; opacity:0.7;">EduBase — Sab kuch Free hai for Future Doctors</p>
+    </footer>
+
+    <!-- ============================================
+    JAVASCRIPT
+    ============================================ -->
+    <script>
+        // =============================================
+        // ONBOARDING
+        // =============================================
+        let selectedClass = '';
+        let selectedStream = '';
+
+        document.querySelectorAll('#classGroup .option-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('#classGroup .option-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedClass = this.dataset.value;
+            });
+        });
+
+        document.querySelectorAll('#streamGroup .option-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('#streamGroup .option-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedStream = this.dataset.value;
+            });
+        });
+
+        function completeOnboarding() {
+            if (!selectedClass || !selectedStream) {
+                alert('⚠️ Please select both Class and Stream!');
+                return;
+            }
+            localStorage.setItem('userClass', selectedClass);
+            localStorage.setItem('userStream', selectedStream);
+            localStorage.setItem('onboardingDone', 'true');
+            document.getElementById('onboardingModal').classList.add('hidden');
+            updateUserUI();
+        }
+
+        function updateUserUI() {
+            const userClass = localStorage.getItem('userClass') || '12th';
+            const userStream = localStorage.getItem('userStream') || 'NEET';
+            const userName = localStorage.getItem('profileName') || 'NEET Aspirant';
+            document.getElementById('userNameDisplay').textContent = userName;
+            document.getElementById('userClassDisplay').textContent = `Class: ${userClass} | Stream: ${userStream}`;
+        }
+
+        if (localStorage.getItem('onboardingDone') === 'true') {
+            document.getElementById('onboardingModal').classList.add('hidden');
+        }
+        updateUserUI();
+
+        // =============================================
+        // DARK MODE (Auto-Detect + Manual Toggle)
+        // =============================================
+        function getSystemTheme() {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        function applyTheme() {
+            const saved = localStorage.getItem('theme');
+            const system = getSystemTheme();
+            const theme = saved || system;
+            if (theme === 'dark') document.body.classList.add('dark-mode');
+            else document.body.classList.remove('dark-mode');
+            document.getElementById('themeToggle').checked = (theme === 'dark');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                document.body.classList.toggle('dark-mode', e.matches);
+                document.getElementById('themeToggle').checked = e.matches;
+            }
+        });
+
+        applyTheme();
+
+        // =============================================
+        // MOBILE MENU
+        // =============================================
+        function toggleMobile() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+        }
+
+        // =============================================
+        // PROFILE
+        // =============================================
+        function loadProfile() {
+            const name = localStorage.getItem('profileName') || 'Guest';
+            const email = localStorage.getItem('profileEmail') || '';
+            const pic = localStorage.getItem('profilePic') || '';
+
+            document.getElementById('profileNameNav').textContent = name.charAt(0).toUpperCase();
+            document.getElementById('modalName').textContent = name;
+            document.getElementById('modalEmail').textContent = email || 'No email set';
+            document.getElementById('profileNameInput').value = name;
+            document.getElementById('profileEmailInput').value = email;
+
+            const avatarNav = document.getElementById('profileAvatarNav');
+            const modalAv = document.getElementById('modalAvatar');
+            if (pic) {
+                avatarNav.innerHTML = `<img src="${pic}" />`;
+                modalAv.innerHTML = `<img src="${pic}" />`;
+            } else {
+                avatarNav.textContent = name.charAt(0).toUpperCase() || '?';
+                modalAv.textContent = name.charAt(0).toUpperCase() || '?';
+            }
+        }
+
+        function openProfile() {
+            document.getElementById('profileModal').classList.add('open');
+            loadProfile();
+        }
+
+        function closeProfile() {
+            document.getElementById('profileModal').classList.remove('open');
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('profileNameInput').value.trim();
+            if (!name) { alert('⚠️ Please enter your name!'); return; }
+            localStorage.setItem('profileName', name);
+            localStorage.setItem('profileEmail', document.getElementById('profileEmailInput').value.trim());
+
+            const file = document.getElementById('profilePicInput').files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    localStorage.setItem('profilePic', e.target.result);
+                    loadProfile();
+                    closeProfile();
+                    alert('✅ Profile saved!');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                loadProfile();
+                closeProfile();
+                alert('✅ Profile saved!');
+            }
+            updateUserUI();
+        }
+
+        // =============================================
+        // DOUBT SOLVER
+        // =============================================
+        function loadDoubts() {
+            const doubts = JSON.parse(localStorage.getItem('doubts')) || [];
+            const list = document.getElementById('doubtList');
+            if (!doubts.length) {
+                list.innerHTML = '<p style="color:var(--text-secondary); font-size:0.9rem; text-align:center; padding:8px 0;">No doubts yet.</p>';
+                return;
+            }
+            list.innerHTML = doubts.map((d, i) => `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; background:var(--bg-body); border-radius:12px; margin-bottom:6px; font-size:0.9rem; color:var(--text-secondary);">
+                            <span><strong>${d.subject}:</strong> ${d.text}</span>
+                            <button onclick="deleteDoubt(${i})" style="background:#ef4444; color:white; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; font-weight:700;">✕</button>
+                        </div>
+                    `).join('');
+        }
+
+        function addDoubt() {
+            const subject = document.getElementById('doubtSubject').value;
+            const text = document.getElementById('doubtInput').value.trim();
+            if (!text) { alert('⚠️ Write your doubt first!'); return; }
+            const doubts = JSON.parse(localStorage.getItem('doubts')) || [];
+            doubts.push({ subject, text });
+            localStorage.setItem('doubts', JSON.stringify(doubts));
+            document.getElementById('doubtInput').value = '';
+            loadDoubts();
+            alert('✅ Doubt added!');
+        }
+
+        function deleteDoubt(i) {
+            const doubts = JSON.parse(localStorage.getItem('doubts')) || [];
+            doubts.splice(i, 1);
+            localStorage.setItem('doubts', JSON.stringify(doubts));
+            loadDoubts();
+        }
+
+        function openDoubt() {
+            document.getElementById('doubtModal').classList.add('open');
+            loadDoubts();
+        }
+
+        function closeDoubt() {
+            document.getElementById('doubtModal').classList.remove('open');
+        }
+
+        // Close modal on outside click
+        document.querySelectorAll('.modal-overlay').forEach(el => {
+            el.addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('open');
+            });
+        });
+
+        // =============================================
+        // INIT
+        // =============================================
+        loadProfile();
+        loadDoubts();
+    </script>
+
+</body>
+</html>
